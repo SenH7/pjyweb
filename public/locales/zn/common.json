@@ -1,0 +1,23 @@
+{
+    "site": {
+      "title": "PJY 触摸屏制造",
+      "description": "为各行业提供高品质触摸屏解决方案"
+    },
+    "nav": {
+      "home": "首页",
+      "about": "关于我们",
+      "products": "产品",
+      "contact": "联系我们"
+    },
+    "search": {
+      "placeholder": "搜索产品...",
+      "noResults": "未找到结果",
+      "button": "搜索"
+    },
+    "footer": {
+      "copyright": "© 2025 PJY 触摸屏制造。保留所有权利。",
+      "address": "创新区技术园123号",
+      "phone": "+1 (555) 123-4567",
+      "email": "info@pjytouch.com"
+    }
+  }

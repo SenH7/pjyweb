@@ -1,0 +1,23 @@
+{
+    "site": {
+      "title": "PJY Touchscreen Manufacturing",
+      "description": "High-quality touchscreen solutions for various industries"
+    },
+    "nav": {
+      "home": "Home",
+      "about": "About Us",
+      "products": "Products",
+      "contact": "Contact Us"
+    },
+    "search": {
+      "placeholder": "Search products...",
+      "noResults": "No results found",
+      "button": "Search"
+    },
+    "footer": {
+      "copyright": "© 2025 PJY Touchscreen Manufacturing. All rights reserved.",
+      "address": "123 Technology Park, Innovation District",
+      "phone": "+1 (555) 123-4567",
+      "email": "info@pjytouch.com"
+    }
+  }
