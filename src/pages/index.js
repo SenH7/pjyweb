@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/layout/Layout';
 import Link from 'next/link';
 import ProductCard from '../components/products/ProductCard';
+import ImageCarousel from '../components/ui/ImageCarousel'; 
 import { getAllProducts } from '../utils/search';
 
 export default function Home() {
@@ -12,6 +13,29 @@ export default function Home() {
   
   // Get featured products (for this example, just the first 3)
   const featuredProducts = getAllProducts().slice(0, 3);
+
+  const carouselImages = [
+    {
+      src: "/images/hero-touchscreen.jpg",
+      alt: "High-quality touchscreen display"
+    },
+    {
+      src: "/images/hero-touchscreen-2.jpg",
+      alt: "Industrial touchscreen solution"
+    },
+    {
+      src: "/images/hero-touchscreen-3.jpg",
+      alt: "Multi-touch capacitive display"
+    },
+    {
+      src: "/images/hero-touchscreen-4.jpg",
+      alt: "Multi-touch capacitive display"
+    },
+    {
+      src: "/images/hero-touchscreen-5.jpg",
+      alt: "Multi-touch capacitive display"
+    }
+  ];
 
   return (
     <Layout>
@@ -46,11 +70,14 @@ export default function Home() {
               </div>
             </div>
             <div className="md:w-1/2">
-              <img 
+              {/* <img 
                 src="/images/hero-touchscreen.jpg" 
                 alt="Touchscreen Display" 
                 className="rounded-lg shadow-lg"
-              />
+              /> */}
+              <div className="rounded-lg shadow-lg overflow-hidden">
+                <ImageCarousel images={carouselImages} />
+              </div>
             </div>
           </div>
         </div>

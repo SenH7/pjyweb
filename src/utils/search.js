@@ -74,7 +74,7 @@ const products = [
       technology: '4-wire Resistive',
       interface: 'USB'
     },
-    image: '/images/products/touchscreen-7inch.jpg'
+    image: '/images/products/7eresistance.jpg'
   },
   {
     id: 3,
@@ -110,7 +110,7 @@ const products = [
       technology: 'PCAP with glove mode',
       interface: 'USB/RS232'
     },
-    image: '/images/products/touchscreen-15inch.jpg'
+    image: '/images/products/15industry.jpg'
   }
 ];
 
