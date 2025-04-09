@@ -13,7 +13,7 @@ const client = createClient({
  */
 export const getContentfulProducts = async () => {
   try {
-    const response = await client.getEntries({
+    const response = await client.withAllLocales.getEntries({
       content_type: 'product', // Content type ID in Contentful
       include: 2, // Include linked entries (up to 2 levels)
     });
@@ -32,7 +32,7 @@ export const getContentfulProducts = async () => {
  */
 export const getContentfulProductBySlug = async (slug) => {
   try {
-    const response = await client.getEntries({
+    const response = await client.withAllLocales.getEntries({
       content_type: 'product',
       'fields.slug': slug,
       include: 2,
@@ -67,21 +67,28 @@ const transformProductData = (item) => {
     console.log("Chinese title:", fields.title['zh'] || fields.title['zh-CN']);
   }
 
+  const getImageUrl = (imageField) => {
+    if (!imageField) return null;
+
+    const defaultImage = imageField['en-US'] || imageField;
+    return defaultImage?.fields?.file?.url 
+      ? `https:${defaultImage.fields.file.url}`
+      : null;
+  };
+
   // Basic product data
   const product = {
     id: sys.id,
     slug: fields.slug || `product-${sys.id}`,
     title: {
-      en: typeof fields.title === 'object' ? fields.title['en-US'] || '' : fields.title || '',
-      zh: typeof fields.title === 'object' ? fields.title['zh'] || fields.title['zh-CN'] || '' : '',
+      en: fields.title?.['en-US'] || '',
+      zh: fields.title?.['zh-CN'] || fields.title?.['zh'] || '',
     },
     description: {
-      en: typeof fields.description === 'object' ? fields.description['en-US'] || '' : fields.description || '',
-      zh: typeof fields.description === 'object' ? fields.description['zh'] || fields.description['zh-CN'] || '' : '',
+      en: fields.description?.['en-US'] || '',
+      zh: fields.description?.['zh-CN'] || fields.description?.['zh'] || '',
     },
-    image: fields.mainImage?.fields?.file?.url ? 
-      `https:${fields.mainImage.fields.file.url}` : 
-      '/images/products/placeholder.jpg', // Fallback image
+    image: getImageUrl(),
   };
   
   // Handle Features field (as JSON object or localized)
@@ -98,6 +105,9 @@ const transformProductData = (item) => {
           product.features.en = fields.features['en-US'] || [];
           product.features.zh = fields.features['zh'] || fields.features['zh-CN'] || [];
         } else if (fields.features.en) {
+          // It's a JSON object with language keys
+          product.features = fields.features;
+        } else if (fields.features.zh) {
           // It's a JSON object with language keys
           product.features = fields.features;
         } else if (Array.isArray(fields.features)) {
@@ -217,6 +227,10 @@ export const testLocalizedFields = async () => {
     return null;
   }
 };
+
+testLocalizedFields().then(data => {
+  console.log('Processed image URL:', data.transformed.image);
+});
 
 // Update the default export
 export default {

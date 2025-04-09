@@ -20,7 +20,7 @@ const AdminProductsPage = () => {
   const checkPassword = (e) => {
     e.preventDefault();
     // Simple password for demo purposes - in a real app, use proper auth
-    if (password === 'contentful-admin') {
+    if (password === 'q') {
       setIsAuthorized(true);
       localStorage.setItem('contentful_admin_auth', 'true');
     } else {

@@ -211,7 +211,7 @@ const ContentfulPreview = () => {
                     {expandedProduct === product.id ? 'Hide' : 'View'}
                   </button>
                   <Link 
-                    href={`/admin/products/edit/${product.id}`} 
+                    href={`/admin/products/edit/${product.slug}`} 
                     className="text-green-600 hover:text-green-800"
                   >
                     Edit
