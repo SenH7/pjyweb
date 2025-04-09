@@ -1,18 +1,36 @@
 // src/pages/index.js
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/layout/Layout';
 import Link from 'next/link';
 import ProductCard from '../components/products/ProductCard';
-import ImageCarousel from '../components/ui/ImageCarousel'; 
+import ImageCarousel from '../components/ui/ImageCarousel';
 import { getAllProducts } from '../utils/search';
 
 export default function Home() {
+  // export default function Home({ featuredProducts }) {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language;
-  
+
   // Get featured products (for this example, just the first 3)
-  const featuredProducts = getAllProducts().slice(0, 3);
+  // const featuredProducts = getAllProducts().slice(0, 3);
+
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const products = await getAllProducts();
+        setFeaturedProducts(products.slice(0, 3));
+      } catch (error) {
+        console.error('Error loading featured products:', error);
+        setFeaturedProducts([]);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   const carouselImages = [
     {
@@ -45,8 +63,8 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                {locale === 'en' 
-                  ? 'High-Quality Touchscreen Solutions' 
+                {locale === 'en'
+                  ? 'High-Quality Touchscreen Solutions'
                   : '高品质触摸屏解决方案'}
               </h1>
               <p className="text-xl mb-6">
@@ -55,14 +73,14 @@ export default function Home() {
                   : '为各行业和应用提供创新触摸屏技术。'}
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link 
-                  href="/products" 
+                <Link
+                  href="/products"
                   className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition-colors"
                 >
                   {locale === 'en' ? 'View Products' : '查看产品'}
                 </Link>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/contact"
                   className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg font-medium transition-colors"
                 >
                   {locale === 'en' ? 'Contact Us' : '联系我们'}
@@ -147,8 +165,8 @@ export default function Home() {
             <h2 className="text-3xl font-bold">
               {locale === 'en' ? 'Featured Products' : '精选产品'}
             </h2>
-            <Link 
-              href="/products" 
+            <Link
+              href="/products"
               className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
             >
               {locale === 'en' ? 'View All Products' : '查看所有产品'}
@@ -169,8 +187,8 @@ export default function Home() {
       <section className="py-16 bg-blue-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            {locale === 'en' 
-              ? 'Ready to Upgrade Your Technology?' 
+            {locale === 'en'
+              ? 'Ready to Upgrade Your Technology?'
               : '准备升级您的技术？'}
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -178,8 +196,8 @@ export default function Home() {
               ? 'Contact our team today to discuss your touchscreen needs and get a customized solution.'
               : '立即联系我们的团队，讨论您的触摸屏需求并获取定制解决方案。'}
           </p>
-          <Link 
-            href="/contact" 
+          <Link
+            href="/contact"
             className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-medium text-lg transition-colors inline-block"
           >
             {locale === 'en' ? 'Get in Touch' : '联系我们'}
@@ -197,3 +215,22 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
+
+// export async function getStaticProps({ locale }) {
+//   // Fetch products from Contentful
+//   let featuredProducts = [];
+//   try {
+//     const products = await getAllProducts();
+//     featuredProducts = products.slice(0, 3);
+//   } catch (error) {
+//     console.error('Error fetching products:', error);
+//   }
+
+//   return {
+//     props: {
+//       ...(await serverSideTranslations(locale, ['common'])),
+//       featuredProducts,
+//     },
+//     revalidate: 3600, // Revalidate every hour
+//   };
+// }

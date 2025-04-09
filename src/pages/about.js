@@ -33,7 +33,7 @@ export default function About() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
               <img 
-                src="/images/company-building.jpg" 
+                src="/images/company_default.jpg" 
                 alt={locale === 'en' ? 'PJY Headquarters' : 'PJY总部'} 
                 className="rounded-lg shadow-lg"
               />
@@ -131,21 +131,21 @@ export default function About() {
             <div className="text-center">
               <div className="mb-4 relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                 <img 
-                  src="/images/team-ceo.jpg" 
+                  src="/images/default_image.png" 
                   alt="CEO" 
                   className="absolute w-full h-full object-cover object-center"
                 />
               </div>
               <h3 className="text-xl font-semibold">
-                {locale === 'en' ? 'John Zhang' : '张俊'}
+                {locale === 'en' ? '' : ''}
               </h3>
               <p className="text-blue-600 mb-2">
                 {locale === 'en' ? 'Chief Executive Officer' : '首席执行官'}
               </p>
               <p className="text-gray-600 max-w-xs mx-auto">
                 {locale === 'en'
-                  ? 'With over 20 years of experience in technology manufacturing, John leads our company vision and strategy.'
-                  : '拥有超过20年的技术制造经验，张俊领导着我们公司的愿景和战略。'}
+                  ? 'With over 20 years of experience in technology manufacturing,  leads our company vision and strategy.'
+                  : '拥有超过20年的技术制造经验，领导着我们公司的愿景和战略。'}
               </p>
             </div>
             
@@ -153,21 +153,21 @@ export default function About() {
             <div className="text-center">
               <div className="mb-4 relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                 <img 
-                  src="/images/team-cto.jpg" 
+                  src="/images/default_image.png" 
                   alt="CTO" 
                   className="absolute w-full h-full object-cover object-center"
                 />
               </div>
               <h3 className="text-xl font-semibold">
-                {locale === 'en' ? 'Sarah Chen' : '陈丽'}
+                {locale === 'en' ? '' : ''}
               </h3>
               <p className="text-blue-600 mb-2">
                 {locale === 'en' ? 'Chief Technology Officer' : '首席技术官'}
               </p>
               <p className="text-gray-600 max-w-xs mx-auto">
                 {locale === 'en'
-                  ? 'Sarah oversees our R&D efforts and ensures PJY remains at the cutting edge of touchscreen innovation.'
-                  : '陈丽监督我们的研发工作，确保PJY保持在触摸屏创新的前沿。'}
+                  ? ' oversees our R&D efforts and ensures PJY remains at the cutting edge of touchscreen innovation.'
+                  : '监督我们的研发工作，确保PJY保持在触摸屏创新的前沿。'}
               </p>
             </div>
             
@@ -175,21 +175,21 @@ export default function About() {
             <div className="text-center">
               <div className="mb-4 relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                 <img 
-                  src="/images/team-coo.jpg" 
+                  src="/images/default_image.png"
                   alt="COO" 
                   className="absolute w-full h-full object-cover object-center"
                 />
               </div>
               <h3 className="text-xl font-semibold">
-                {locale === 'en' ? 'Michael Li' : '李明'}
+                {locale === 'en' ? '' : ''}
               </h3>
               <p className="text-blue-600 mb-2">
                 {locale === 'en' ? 'Chief Operations Officer' : '首席运营官'}
               </p>
               <p className="text-gray-600 max-w-xs mx-auto">
                 {locale === 'en'
-                  ? 'Michael manages our manufacturing processes to ensure efficient, high-quality production.'
-                  : '李明管理我们的制造流程，确保高效、高质量的生产。'}
+                  ? ' manages our manufacturing processes to ensure efficient, high-quality production.'
+                  : '管理我们的制造流程，确保高效、高质量的生产。'}
               </p>
             </div>
           </div>

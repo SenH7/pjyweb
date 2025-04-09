@@ -1,6 +1,6 @@
 {
     "site": {
-      "title": "PJY 触摸屏制造",
+      "title": "鹏锦源科技有限公司",
       "description": "为各行业提供高品质触摸屏解决方案"
     },
     "nav": {
@@ -15,7 +15,8 @@
       "button": "搜索"
     },
     "footer": {
-      "copyright": "© 2025 PJY 触摸屏制造。保留所有权利。",
+      "title": "鹏锦源科技有限公司",
+      "copyright": "© 2025 鹏锦源科技有限公司。保留所有权利。",
       "address": "创新区技术园123号",
       "phone": "+1 (555) 123-4567",
       "email": "info@pjytouch.com"

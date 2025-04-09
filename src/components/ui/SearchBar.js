@@ -47,13 +47,22 @@ const SearchBar = () => {
     }
   };
   
+  // Debounce search input to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (query && query.trim()) {
+        handleSearch();
+      }
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timer);
+  }, [query]);
+  
   const handleInputChange = (e) => {
     setQuery(e.target.value);
     if (e.target.value.trim() === '') {
       setResults([]);
       setShowResults(false);
-    } else {
-      handleSearch();
     }
   };
   
@@ -124,7 +133,7 @@ const SearchBar = () => {
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setShowResults(false)}
                   >
-                    {product.title}
+                    {product.title[i18n.language] || product.title.en}
                   </Link>
                 </li>
               ))}

@@ -1,9 +1,68 @@
 // src/utils/search.js
 import Fuse from 'fuse.js';
+import { getContentfulProducts, getContentfulProductBySlug } from './contentful';
 
-// This would typically be loaded from a data source or API
-// For this example, we'll use a mock product data array
-const products = [
+// Cache for products to avoid multiple API calls
+let productsCache = null;
+
+/**
+ * Get all products from Contentful
+ * @returns {Promise<Array>} All products
+ */
+export const getAllProducts = async () => {
+  if (productsCache) {
+    return productsCache;
+  }
+  
+  productsCache = await getContentfulProducts();
+  return productsCache;
+};
+
+/**
+ * Search products based on a query
+ * @param {string} query - Search query
+ * @param {string} locale - Current locale (en or zh)
+ * @returns {Promise<Array>} Search results
+ */
+export const searchProducts = async (query, locale = 'en') => {
+  if (!query) return [];
+  
+  const products = await getAllProducts();
+  
+  const options = {
+    includeScore: true,
+    threshold: 0.4,
+    keys: [
+      `title.${locale}`,
+      `description.${locale}`,
+      `features.${locale}`
+    ]
+  };
+  
+  const fuse = new Fuse(products, options);
+  const results = fuse.search(query);
+  
+  return results.map(result => result.item);
+};
+
+/**
+ * Get a single product by slug
+ * @param {string} slug - Product slug
+ * @returns {Promise<Object|null>} Product or null if not found
+ */
+export const getProductBySlug = async (slug) => {
+  // First check cache if available
+  if (productsCache) {
+    const product = productsCache.find(product => product.slug === slug);
+    if (product) return product;
+  }
+  
+  // If not in cache or not found, get directly from Contentful
+  return await getContentfulProductBySlug(slug);
+};
+
+// Fallback data for development or if Contentful fails
+const fallbackProducts = [
   {
     id: 1,
     slug: 'capacitive-touchscreen-10.1inch',
@@ -113,45 +172,3 @@ const products = [
     image: '/images/products/15industry.jpg'
   }
 ];
-
-/**
- * Search products based on a query
- * @param {string} query - Search query
- * @param {string} locale - Current locale (en or zh)
- * @returns {Array} Search results
- */
-export const searchProducts = (query, locale = 'en') => {
-  if (!query) return [];
-  
-  const options = {
-    includeScore: true,
-    threshold: 0.4,
-    keys: [
-      `title.${locale}`,
-      `description.${locale}`,
-      `features.${locale}`
-    ]
-  };
-  
-  const fuse = new Fuse(products, options);
-  const results = fuse.search(query);
-  
-  return results.map(result => result.item);
-};
-
-/**
- * Get all products
- * @returns {Array} All products
- */
-export const getAllProducts = () => {
-  return products;
-};
-
-/**
- * Get a single product by slug
- * @param {string} slug - Product slug
- * @returns {Object|null} Product or null if not found
- */
-export const getProductBySlug = (slug) => {
-  return products.find(product => product.slug === slug) || null;
-};

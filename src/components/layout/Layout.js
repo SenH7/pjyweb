@@ -29,7 +29,7 @@ const Layout = ({ children, title, description }) => {
         ))}
       </Head>
       <Navbar />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow pt-16">{children}</main>
       <Footer />
     </div>
   );

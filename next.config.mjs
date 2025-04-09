@@ -6,6 +6,9 @@ const { i18n } = nextI18nConfig;
 const nextConfig = {
   reactStrictMode: true,
   i18n,
+  images: {
+    domains: ['images.ctfassets.net'],
+  },
 };
 
 export default nextConfig;

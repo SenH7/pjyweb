@@ -4,11 +4,9 @@ import Layout from '../../components/layout/Layout';
 import ProductCard from '../../components/products/ProductCard';
 import { getAllProducts } from '../../utils/search';
 
-export default function Products() {
+export default function Products({ products }) {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language;
-  
-  const allProducts = getAllProducts();
 
   return (
     <Layout
@@ -57,7 +55,7 @@ export default function Products() {
           
           {/* Products */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {allProducts.map(product => (
+            {products.map(product => (
               <ProductCard key={product.id} product={product} locale={locale} />
             ))}
           </div>
@@ -90,9 +88,20 @@ export default function Products() {
 }
 
 export async function getStaticProps({ locale }) {
+  // Fetch products from Contentful
+  let products = [];
+  try {
+    products = await getAllProducts();
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common'])),
+      products,
     },
+    // Revalidate every hour (3600 seconds)
+    revalidate: 3600,
   };
 }
