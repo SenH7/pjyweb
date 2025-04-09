@@ -8,7 +8,7 @@ const client = createClient({
 });
 
 /**
- * Get all products from Contentful
+ * Get all products from Contentful with proper multilingual support
  * @returns {Promise<Array>} Array of products
  */
 export const getContentfulProducts = async () => {
@@ -26,7 +26,7 @@ export const getContentfulProducts = async () => {
 };
 
 /**
- * Get a single product by slug
+ * Get a single product by slug with proper multilingual support
  * @param {string} slug - Product slug
  * @returns {Promise<Object|null>} Product or null if not found
  */
@@ -51,32 +51,40 @@ export const getContentfulProductBySlug = async (slug) => {
 
 /**
  * Transform Contentful product data to the format expected by the app
- * This handles cases where some fields might be missing
+ * This improved version properly handles multilingual content
  * @param {Object} item - Contentful product entry
  * @returns {Object} Transformed product data
  */
 const transformProductData = (item) => {
-  const { fields } = item;
+  const { fields, sys } = item;
   
-  // Basic product data that should always be present
+  // Debug logging
+  console.log("Raw fields from Contentful:", fields);
+  console.log("Title field type:", typeof fields.title);
+  if (typeof fields.title === 'object') {
+    console.log("Title languages available:", Object.keys(fields.title));
+    console.log("English title:", fields.title['en-US']);
+    console.log("Chinese title:", fields.title['zh'] || fields.title['zh-CN']);
+  }
+
+  // Basic product data
   const product = {
-    id: item.sys.id,
-    slug: fields.slug || `product-${item.sys.id}`,
+    id: sys.id,
+    slug: fields.slug || `product-${sys.id}`,
     title: {
-      en: fields.title || '',
-      zh: fields.title || '', // Fallback to English if no Chinese title
+      en: typeof fields.title === 'object' ? fields.title['en-US'] || '' : fields.title || '',
+      zh: typeof fields.title === 'object' ? fields.title['zh'] || fields.title['zh-CN'] || '' : '',
     },
-    // Handle optional fields
     description: {
-      en: fields.description || '',
-      zh: fields.description || '', // Fallback to English if no Chinese description
+      en: typeof fields.description === 'object' ? fields.description['en-US'] || '' : fields.description || '',
+      zh: typeof fields.description === 'object' ? fields.description['zh'] || fields.description['zh-CN'] || '' : '',
     },
     image: fields.mainImage?.fields?.file?.url ? 
       `https:${fields.mainImage.fields.file.url}` : 
       '/images/products/placeholder.jpg', // Fallback image
   };
   
-  // Handle Features field (JSON object)
+  // Handle Features field (as JSON object or localized)
   product.features = {
     en: [],
     zh: [],
@@ -84,13 +92,18 @@ const transformProductData = (item) => {
   
   if (fields.features) {
     try {
-      // If features is stored as a JSON object with en/zh properties
-      if (typeof fields.features === 'object' && fields.features.en) {
-        product.features = fields.features;
-      } else if (Array.isArray(fields.features)) {
-        // If features is stored as an array
-        product.features.en = fields.features;
-        product.features.zh = fields.features;
+      if (typeof fields.features === 'object') {
+        if (fields.features['en-US']) {
+          // It's a localized field
+          product.features.en = fields.features['en-US'] || [];
+          product.features.zh = fields.features['zh'] || fields.features['zh-CN'] || [];
+        } else if (fields.features.en) {
+          // It's a JSON object with language keys
+          product.features = fields.features;
+        } else if (Array.isArray(fields.features)) {
+          // It's just an array
+          product.features.en = fields.features;
+        }
       }
     } catch (error) {
       console.error('Error parsing features:', error);
@@ -104,16 +117,30 @@ const transformProductData = (item) => {
     resolution: '',
     technology: '',
     interface: '',
+    // other specification fields...
   };
   
   if (fields.specifications) {
     try {
-      // If specifications is stored as a JSON object
       if (typeof fields.specifications === 'object') {
-        product.specifications = {
-          ...product.specifications,
-          ...fields.specifications,
-        };
+        if (fields.specifications['en-US']) {
+          // It's a localized field
+          product.specifications = {
+            ...product.specifications,
+            ...fields.specifications['en-US']
+          };
+          
+          // Store Chinese specifications if needed
+          if (fields.specifications['zh'] || fields.specifications['zh-CN']) {
+            product.specificationsZh = fields.specifications['zh'] || fields.specifications['zh-CN'];
+          }
+        } else {
+          // Regular JSON object
+          product.specifications = {
+            ...product.specifications,
+            ...fields.specifications,
+          };
+        }
       }
     } catch (error) {
       console.error('Error parsing specifications:', error);
@@ -122,15 +149,30 @@ const transformProductData = (item) => {
   
   // Add other optional fields as needed
   if (fields.productWarranty) {
-    product.warranty = fields.productWarranty;
+    if (typeof fields.productWarranty === 'object') {
+      product.warranty = fields.productWarranty['en-US'] || '';
+      product.warrantyZh = fields.productWarranty['zh'] || fields.productWarranty['zh-CN'] || '';
+    } else {
+      product.warranty = fields.productWarranty;
+    }
   }
   
   if (fields.safetyWarning) {
-    product.safetyWarning = fields.safetyWarning;
+    if (typeof fields.safetyWarning === 'object') {
+      product.safetyWarning = fields.safetyWarning['en-US'] || '';
+      product.safetyWarningZh = fields.safetyWarning['zh'] || fields.safetyWarning['zh-CN'] || '';
+    } else {
+      product.safetyWarning = fields.safetyWarning;
+    }
   }
   
   if (fields.notesForAttention) {
-    product.notes = fields.notesForAttention;
+    if (typeof fields.notesForAttention === 'object') {
+      product.notes = fields.notesForAttention['en-US'] || '';
+      product.notesZh = fields.notesForAttention['zh'] || fields.notesForAttention['zh-CN'] || '';
+    } else {
+      product.notes = fields.notesForAttention;
+    }
   }
   
   // Gallery images (if present)
@@ -142,4 +184,43 @@ const transformProductData = (item) => {
   }
   
   return product;
+};
+
+// export default {
+//   getContentfulProducts,
+//   getContentfulProductBySlug
+// };
+
+export const testLocalizedFields = async () => {
+  try {
+    const response = await client.getEntries({
+      content_type: 'product',
+      limit: 1,
+    });
+    
+    if (response.items.length > 0) {
+      const item = response.items[0];
+      console.log("Raw fields:", item.fields);
+      
+      const transformed = transformProductData(item);
+      console.log("Transformed product:", transformed);
+      
+      return {
+        raw: item.fields,
+        transformed: transformed
+      };
+    }
+    
+    return null;
+  } catch (error) {
+    console.error("Test error:", error);
+    return null;
+  }
+};
+
+// Update the default export
+export default {
+  getContentfulProducts,
+  getContentfulProductBySlug,
+  testLocalizedFields
 };
