@@ -81,16 +81,17 @@ const transformProductData = (item) => {
     weight: '',
     resolution: '',
     dimensions: '',
+    brightness: '',
+    contrastRatio: '',
+    aspectRatio: '',
     // Default values for touch specifications
     size: '',
     backlight: '',
-    brightness: '',
-    dimensions: '',
     technology: '',
-    aspectRatio: '',
     videoInputs: '',
     compatibleOS: '',
-    contrastRatio: '',
+    otherInterfaces: '',
+    
     // Default values for camera specifications
     audio: '',
     lenses: '',
@@ -105,9 +106,7 @@ const transformProductData = (item) => {
     powerConsumption: '',
     operatingTemperature: '',
     // Default values for all in one machine specifications
-    brightness: '',
-    aspectRatio: '',
-    contrastRatio: '',
+
     maximumViewingAngle: '',
     effectiveDisplayArea: '',
     wallMountBracketSize: '',
