@@ -68,13 +68,14 @@ const transformProductData = (item) => {
     slug: productSlug,
     title: {
       en: fields.title?.['en-US'] || '',
-      zh: fields.title?.['zh-CN'] || fields.title?.['zh'] || '',
+      zh: fields.titleChinese?.['en-US'] || fields.title?.['zh-CN'] || fields.title?.['zh'] || '',
     },
     description: {
       en: fields.description?.['en-US'] || '',
-      zh: fields.description?.['zh-CN'] || fields.description?.['zh'] || '',
+      zh: fields.descriptionChinese?.['en-US'] || fields.description?.['zh-CN'] || fields.description?.['zh'] || '',
     },
     // Use the mapping function to get the correct image path
+    // This function is defined in utils/imageMapping.js
     image: getProductImage(productSlug),
   };
   
@@ -86,26 +87,33 @@ const transformProductData = (item) => {
   
   if (fields.features) {
     try {
-      if (typeof fields.features === 'object') {
-        if (fields.features['en-US']) {
-          // It's a localized field
-          product.features.en = fields.features['en-US'] || [];
-          product.features.zh = fields.features['zh'] || fields.features['zh-CN'] || [];
-        } else if (fields.features.en) {
-          // It's a JSON object with language keys
-          product.features = fields.features;
-        } else if (fields.features.zh) {
-          // It's a JSON object with language keys
-          product.features = fields.features;
-        } else if (Array.isArray(fields.features)) {
-          // It's just an array
-          product.features.en = fields.features;
-        }
+      if (typeof fields.features['en-US'] !== 'undefined') {
+        // It's a localized field
+        product.features.en = Array.isArray(fields.features['en-US']) ? fields.features['en-US'] : [];
       }
     } catch (error) {
-      console.error('Error parsing features:', error);
+      console.error('Error parsing English features:', error);
     }
   }
+  
+  // Handle Chinese features (could be in a separate field)
+  if (fields.featuresChinese) {
+    try {
+      product.features.zh = Array.isArray(fields.featuresChinese['en-US']) ? fields.featuresChinese['en-US'] : [];
+    } catch (error) {
+      console.error('Error parsing Chinese features:', error);
+    }
+  } else if (fields.features && fields.features['zh']) {
+    try {
+      product.features.zh = Array.isArray(fields.features['zh']) ? fields.features['zh'] : [];
+    } catch (error) {
+      console.error('Error parsing Chinese features from localized field:', error);
+    }
+  }
+  
+  // Ensure features are always arrays
+  if (!Array.isArray(product.features.en)) product.features.en = [];
+  if (!Array.isArray(product.features.zh)) product.features.zh = [];
   
   // Handle Specifications field (JSON object)
   product.specifications = {
@@ -119,56 +127,21 @@ const transformProductData = (item) => {
   
   if (fields.specifications) {
     try {
-      if (typeof fields.specifications === 'object') {
-        if (fields.specifications['en-US']) {
-          // It's a localized field
-          product.specifications = {
-            ...product.specifications,
-            ...fields.specifications['en-US']
-          };
-          
-          // Store Chinese specifications if needed
-          if (fields.specifications['zh'] || fields.specifications['zh-CN']) {
-            product.specificationsZh = fields.specifications['zh'] || fields.specifications['zh-CN'];
-          }
-        } else {
-          // Regular JSON object
-          product.specifications = {
-            ...product.specifications,
-            ...fields.specifications,
-          };
-        }
+      if (typeof fields.specifications['en-US'] !== 'undefined') {
+        // It's a localized field with specifications as an object
+        product.specifications = {
+          ...product.specifications,
+          ...fields.specifications['en-US']
+        };
+      } else if (typeof fields.specifications === 'object') {
+        // Direct specifications object
+        product.specifications = {
+          ...product.specifications,
+          ...fields.specifications
+        };
       }
     } catch (error) {
       console.error('Error parsing specifications:', error);
-    }
-  }
-  
-  // Add other optional fields as needed
-  if (fields.productWarranty) {
-    if (typeof fields.productWarranty === 'object') {
-      product.warranty = fields.productWarranty['en-US'] || '';
-      product.warrantyZh = fields.productWarranty['zh'] || fields.productWarranty['zh-CN'] || '';
-    } else {
-      product.warranty = fields.productWarranty;
-    }
-  }
-  
-  if (fields.safetyWarning) {
-    if (typeof fields.safetyWarning === 'object') {
-      product.safetyWarning = fields.safetyWarning['en-US'] || '';
-      product.safetyWarningZh = fields.safetyWarning['zh'] || fields.safetyWarning['zh-CN'] || '';
-    } else {
-      product.safetyWarning = fields.safetyWarning;
-    }
-  }
-  
-  if (fields.notesForAttention) {
-    if (typeof fields.notesForAttention === 'object') {
-      product.notes = fields.notesForAttention['en-US'] || '';
-      product.notesZh = fields.notesForAttention['zh'] || fields.notesForAttention['zh-CN'] || '';
-    } else {
-      product.notes = fields.notesForAttention;
     }
   }
   

@@ -6,18 +6,18 @@
 // Map Contentful slugs to local image filenames
 const productImageMap = {
     // Example mappings based on your current images
-    'resistive-touchscreen-7inch': '7eresistance.jpg',
-    'capacitive-touchscreen-10.1inch': '10.1ecapacity.jpg',
-    'industrial-touchscreen-15inch': '15industry.jpg',
+    '10-1-inch-embedded-capacitive-touch-display-screen': '/images/products/10.1ecapacity.jpg',
+    '3-5-inch-sound-and-light-warning-spherical-camera': '/images/products/3.5camera.jpg',
+    'all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
 
     // Add more mappings as needed
-    // 'product-slug-from-contentful': 'your-image-filename.jpg',
+    // 'product-slug-from-contentful': '/images/products/your-image-filename.jpg',
 };
 
 // Map for gallery images (you can customize this if needed)
 const galleryImageMap = {
     // You can define specific gallery images if needed
-    // 'product-slug-from-contentful': ['gallery1.jpg', 'gallery2.jpg', 'gallery3.jpg'],
+    // 'product-slug-from-contentful': ['/images/products/gallery1.jpg', '/images/products/gallery2.jpg'],
 };
 
 /**
@@ -29,14 +29,15 @@ export const getProductImage = (slug) => {
     if (!slug) return '/images/products/placeholder-product.jpg';
 
     // Check if there's a specific mapping for this slug
-    const imageName = productImageMap[slug];
+    const imagePath = productImageMap[slug];
 
-    if (imageName) {
-        return `/images/products/${imageName}`;
+    if (imagePath) {
+        return imagePath;
     }
 
-    // If no mapping exists, use a default naming pattern or placeholder
-    return '/images/products/placeholder-product.jpg';
+    // If no mapping exists, use a default naming pattern based on slug
+    // This helps with automatic image matching
+    return `/images/products/${slug}.jpg`;
 };
 
 /**
@@ -52,13 +53,22 @@ export const getProductGallery = (slug, title = '') => {
 
     if (galleryImages && Array.isArray(galleryImages)) {
         return galleryImages.map((image, index) => ({
-            url: `/images/products/${image}`,
+            url: image,
             alt: `${title || 'Product'} view ${index + 1}`
         }));
     }
 
-    // If no specific mapping, we could try to use the main image 
-    // or return an empty array
+    // If no specific mapping, generate fallback gallery from main image
+    const mainImage = getProductImage(slug);
+    if (mainImage && mainImage !== '/images/products/placeholder-product.jpg') {
+        return [
+            {
+                url: mainImage,
+                alt: `${title || 'Product'} main view`
+            }
+        ];
+    }
+
     return [];
 };
 

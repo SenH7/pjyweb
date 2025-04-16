@@ -59,7 +59,7 @@ export default function ProductDetail({ product, relatedProducts }) {
       <section className="pt-12 pb-16">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-12">
-            
+
             {/* Product Image */}
             <div className="lg:w-1/2">
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -69,7 +69,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                   className="w-full h-auto"
                   onError={(e) => {
                     // Fallback to placeholder if image doesn't load
-                    e.target.src = '/images/products/placeholder.jpg';
+                    e.target.src = '/images/products/placeholder-product.jpg';
                   }}
                 />
               </div>

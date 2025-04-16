@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 const ProductCard = ({ product, locale }) => {
   // Use English as fallback if the current locale isn't available
@@ -7,7 +6,7 @@ const ProductCard = ({ product, locale }) => {
   const description = product.description[locale] || product.description.en;
   
   // Fallback image path if the product image doesn't exist
-  const defaultImage = '/images/products/placeholder.jpg';
+  const defaultImage = '/images/products/placeholder-product.jpg';
   
   return (
     <Link 
@@ -15,13 +14,10 @@ const ProductCard = ({ product, locale }) => {
       className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
     >
       <div className="relative h-48 overflow-hidden">
-        <Image
+        <img
           src={product.image || defaultImage}
           alt={title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          // Add error handling for local images
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
             // Fallback to placeholder if image doesn't load
             e.target.src = defaultImage;
