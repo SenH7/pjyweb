@@ -70,58 +70,48 @@ const transformProductData = (item) => {
       en: fields.title?.['en-US'] || '',
       zh: fields.titleChinese?.['en-US'] || fields.title?.['zh-CN'] || fields.title?.['zh'] || '',
     },
-    description: {
-      en: fields.description?.['en-US'] || '',
-      zh: fields.descriptionChinese?.['en-US'] || fields.description?.['zh-CN'] || fields.description?.['zh'] || '',
-    },
     // Use the mapping function to get the correct image path
     // This function is defined in utils/imageMapping.js
     image: getProductImage(productSlug),
   };
   
-  // Handle Features field (as JSON object or localized)
-  product.features = {
-    en: [],
-    zh: [],
-  };
-  
-  if (fields.features) {
-    try {
-      if (typeof fields.features['en-US'] !== 'undefined') {
-        // It's a localized field
-        product.features.en = Array.isArray(fields.features['en-US']) ? fields.features['en-US'] : [];
-      }
-    } catch (error) {
-      console.error('Error parsing English features:', error);
-    }
-  }
-  
-  // Handle Chinese features (could be in a separate field)
-  if (fields.featuresChinese) {
-    try {
-      product.features.zh = Array.isArray(fields.featuresChinese['en-US']) ? fields.featuresChinese['en-US'] : [];
-    } catch (error) {
-      console.error('Error parsing Chinese features:', error);
-    }
-  } else if (fields.features && fields.features['zh']) {
-    try {
-      product.features.zh = Array.isArray(fields.features['zh']) ? fields.features['zh'] : [];
-    } catch (error) {
-      console.error('Error parsing Chinese features from localized field:', error);
-    }
-  }
-  
-  // Ensure features are always arrays
-  if (!Array.isArray(product.features.en)) product.features.en = [];
-  if (!Array.isArray(product.features.zh)) product.features.zh = [];
-  
   // Handle Specifications field (JSON object)
   product.specifications = {
-    dimensions: '',
+    // Default values for common specifications
     weight: '',
     resolution: '',
+    dimensions: '',
+    // Default values for touch specifications
+    size: '',
+    backlight: '',
+    brightness: '',
+    dimensions: '',
     technology: '',
-    interface: '',
+    aspectRatio: '',
+    videoInputs: '',
+    compatibleOS: '',
+    contrastRatio: '',
+    // Default values for camera specifications
+    audio: '',
+    lenses: '',
+    chipset: '',
+    storage: '',
+    wifiRange: '',
+    compression: '',
+    nightVision: '',
+    powerSupply: '',
+    wifiStandard: '',
+    networkInterface: '',
+    powerConsumption: '',
+    operatingTemperature: '',
+    // Default values for all in one machine specifications
+    brightness: '',
+    aspectRatio: '',
+    contrastRatio: '',
+    maximumViewingAngle: '',
+    effectiveDisplayArea: '',
+    wallMountBracketSize: '',
+    resolution: '',
     // other specification fields...
   };
   

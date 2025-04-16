@@ -36,7 +36,6 @@ export default function ProductDetail({ product, relatedProducts }) {
   return (
     <Layout
       title={`${product.title[locale] || product.title.en} | PJY Touchscreen`}
-      description={product.description[locale] || product.description.en}
     >
       {/* Breadcrumbs */}
       <div className="bg-gray-100 py-4">
@@ -78,25 +77,6 @@ export default function ProductDetail({ product, relatedProducts }) {
               {/* Product Info */}
               <div className="lg:w-1/2">
                 <h1 className="text-3xl font-bold mb-4">{product.title[locale] || product.title.en}</h1>
-                <p className="text-lg text-gray-700 mb-6">{product.description[locale] || product.description.en}</p>
-
-                {product.features && product.features[locale]?.length > 0 && (
-                  <div className="mb-8">
-                    <h2 className="text-xl font-semibold mb-3">
-                      {locale === 'en' ? 'Key Features' : '主要特点'}
-                    </h2>
-                    <ul className="space-y-2">
-                      {(product.features[locale] || product.features.en || []).map((feature, index) => (
-                        <li key={index} className="flex items-start">
-                          <svg className="w-5 h-5 text-blue-600 mr-2 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                          </svg>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
 
                 {product.specifications && (
                   <div className="mb-8">

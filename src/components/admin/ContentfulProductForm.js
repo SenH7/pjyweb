@@ -6,8 +6,6 @@ const ContentfulProductForm = ({ product, onSave, isNew = false }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: { en: '', zh: '' },
-    description: { en: '', zh: '' },
-    features: { en: [], zh: [] },
     specifications: {
       dimensions: '',
       weight: '',
@@ -23,9 +21,6 @@ const ContentfulProductForm = ({ product, onSave, isNew = false }) => {
       contrastRatio: '',
       otherInterfaces: ''
     },
-    warranty: '',
-    safetyWarning: '',
-    notes: ''
   });
   
   const [isLoading, setIsLoading] = useState(false);
@@ -42,14 +37,6 @@ const ContentfulProductForm = ({ product, onSave, isNew = false }) => {
         title: {
           en: product.title?.en || '',
           zh: product.title?.zh || ''
-        },
-        description: {
-          en: product.description?.en || '',
-          zh: product.description?.zh || ''
-        },
-        features: {
-          en: product.features?.en || [],
-          zh: product.features?.zh || []
         },
         specifications: {
           ...formData.specifications,
@@ -88,48 +75,6 @@ const ContentfulProductForm = ({ product, onSave, isNew = false }) => {
         [field]: value
       }));
     }
-  };
-
-  const handleFeatureChange = (index, value, language) => {
-    setIsDirty(true);
-    
-    const newFeatures = [...formData.features[language]];
-    newFeatures[index] = value;
-    
-    setFormData(prev => ({
-      ...prev,
-      features: {
-        ...prev.features,
-        [language]: newFeatures
-      }
-    }));
-  };
-
-  const addFeature = (language) => {
-    setIsDirty(true);
-    
-    setFormData(prev => ({
-      ...prev,
-      features: {
-        ...prev.features,
-        [language]: [...prev.features[language], '']
-      }
-    }));
-  };
-
-  const removeFeature = (index, language) => {
-    setIsDirty(true);
-    
-    const newFeatures = [...formData.features[language]];
-    newFeatures.splice(index, 1);
-    
-    setFormData(prev => ({
-      ...prev,
-      features: {
-        ...prev.features,
-        [language]: newFeatures
-      }
-    }));
   };
 
   const handleSubmit = async (e) => {
@@ -184,100 +129,6 @@ const ContentfulProductForm = ({ product, onSave, isNew = false }) => {
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             required
           />
-        </div>
-      </div>
-      
-      {/* Description Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            English Description
-          </label>
-          <textarea
-            value={formData.description.en}
-            onChange={(e) => handleChange('description', e.target.value, 'en')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            rows={4}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Chinese Description (中文描述)
-          </label>
-          <textarea
-            value={formData.description.zh}
-            onChange={(e) => handleChange('description', e.target.value, 'zh')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            rows={4}
-          />
-        </div>
-      </div>
-      
-      {/* Features */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <div className="flex justify-between items-center mb-2">
-            <label className="block text-sm font-medium text-gray-700">
-              English Features
-            </label>
-            <button
-              type="button"
-              onClick={() => addFeature('en')}
-              className="text-blue-600 hover:text-blue-800 text-sm"
-            >
-              + Add Feature
-            </button>
-          </div>
-          {formData.features.en.map((feature, index) => (
-            <div key={index} className="flex mb-2">
-              <input
-                type="text"
-                value={feature}
-                onChange={(e) => handleFeatureChange(index, e.target.value, 'en')}
-                className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md"
-                placeholder={`Feature ${index + 1}`}
-              />
-              <button
-                type="button"
-                onClick={() => removeFeature(index, 'en')}
-                className="bg-red-100 text-red-600 px-3 py-2 rounded-r-md"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-        <div>
-          <div className="flex justify-between items-center mb-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Chinese Features (中文特点)
-            </label>
-            <button
-              type="button"
-              onClick={() => addFeature('zh')}
-              className="text-blue-600 hover:text-blue-800 text-sm"
-            >
-              + 添加特点
-            </button>
-          </div>
-          {formData.features.zh.map((feature, index) => (
-            <div key={index} className="flex mb-2">
-              <input
-                type="text"
-                value={feature}
-                onChange={(e) => handleFeatureChange(index, e.target.value, 'zh')}
-                className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md"
-                placeholder={`特点 ${index + 1}`}
-              />
-              <button
-                type="button"
-                onClick={() => removeFeature(index, 'zh')}
-                className="bg-red-100 text-red-600 px-3 py-2 rounded-r-md"
-              >
-                ×
-              </button>
-            </div>
-          ))}
         </div>
       </div>
       
@@ -443,43 +294,6 @@ const ContentfulProductForm = ({ product, onSave, isNew = false }) => {
               placeholder="e.g., USB 2.0/DC 12V"
             />
           </div>
-        </div>
-      </div>
-      
-      {/* Additional Info */}
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Warranty Information
-          </label>
-          <textarea
-            value={formData.warranty}
-            onChange={(e) => handleChange('warranty', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            rows={3}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Safety Warnings
-          </label>
-          <textarea
-            value={formData.safetyWarning}
-            onChange={(e) => handleChange('safetyWarning', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            rows={3}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Notes for Attention
-          </label>
-          <textarea
-            value={formData.notes}
-            onChange={(e) => handleChange('notes', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            rows={3}
-          />
         </div>
       </div>
       

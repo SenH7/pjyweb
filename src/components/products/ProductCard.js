@@ -3,7 +3,6 @@ import Link from 'next/link';
 const ProductCard = ({ product, locale }) => {
   // Use English as fallback if the current locale isn't available
   const title = product.title[locale] || product.title.en;
-  const description = product.description[locale] || product.description.en;
   
   // Fallback image path if the product image doesn't exist
   const defaultImage = '/images/products/placeholder-product.jpg';
@@ -26,7 +25,6 @@ const ProductCard = ({ product, locale }) => {
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-2 text-gray-800">{title}</h3>
-        <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
       </div>
     </Link>
   );

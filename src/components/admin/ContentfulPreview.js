@@ -1,7 +1,6 @@
 // src/components/admin/ContentfulPreview.js
 import { useState, useEffect } from 'react';
 import { getContentfulProducts } from '../../utils/contentful';
-import Link from 'next/link';
 import contentful from '../../utils/contentful'; // Import the default export
 
 // This component is for development use only
@@ -41,25 +40,7 @@ const ContentfulPreview = () => {
               field: 'title.zh'
             });
           }
-          
-          // Check if description is missing
-          if (!product.description?.en || product.description.en.trim() === '') {
-            issues.push({
-              productId: product.id,
-              productSlug: product.slug,
-              issue: 'Missing English description',
-              field: 'description.en'
-            });
-          }
-          
-          if (!product.description?.zh || product.description.zh.trim() === '') {
-            issues.push({
-              productId: product.id,
-              productSlug: product.slug,
-              issue: 'Missing Chinese description',
-              field: 'description.zh'
-            });
-          }
+        
         });
         
         setIssuesFound(issues);
@@ -172,7 +153,6 @@ const ContentfulPreview = () => {
               <th className="py-2 px-4 border-b text-left">Product ID</th>
               <th className="py-2 px-4 border-b text-left">Slug</th>
               <th className="py-2 px-4 border-b text-left">Title</th>
-              <th className="py-2 px-4 border-b text-left">Description</th>
               <th className="py-2 px-4 border-b text-left">Features</th>
               <th className="py-2 px-4 border-b text-left">Image</th>
               <th className="py-2 px-4 border-b text-left">Actions</th>
@@ -186,9 +166,7 @@ const ContentfulPreview = () => {
                 <td className="py-2 px-4">
                   <LanguageStatus product={product} field="title" />
                 </td>
-                <td className="py-2 px-4">
-                  <LanguageStatus product={product} field="description" />
-                </td>
+
                 <td className="py-2 px-4">
                   <LanguageStatus product={product} field="features" />
                 </td>
@@ -210,12 +188,12 @@ const ContentfulPreview = () => {
                   >
                     {expandedProduct === product.id ? 'Hide' : 'View'}
                   </button>
-                  <Link 
+                  {/* <Link 
                     href={`/admin/products/edit/${product.slug}`} 
                     className="text-green-600 hover:text-green-800"
                   >
                     Edit
-                  </Link>
+                  </Link> */}
                 </td>
               </tr>
             ))}
