@@ -1,5 +1,6 @@
 // src/utils/contentful.js
 import { createClient } from 'contentful';
+import { getProductImage, getProductGallery } from './imageMapping';
 
 // Initialize Contentful client
 const client = createClient({
@@ -51,35 +52,20 @@ export const getContentfulProductBySlug = async (slug) => {
 
 /**
  * Transform Contentful product data to the format expected by the app
- * This improved version properly handles multilingual content
+ * Using local images instead of Contentful-hosted images
  * @param {Object} item - Contentful product entry
  * @returns {Object} Transformed product data
  */
 const transformProductData = (item) => {
   const { fields, sys } = item;
+
+  // Extract product slug
+  const productSlug = fields.slug?.['en-US'] || `product-${sys.id}`;
   
-  // Debug logging
-  console.log("Raw fields from Contentful:", fields);
-  console.log("Title field type:", typeof fields.title);
-  if (typeof fields.title === 'object') {
-    console.log("Title languages available:", Object.keys(fields.title));
-    console.log("English title:", fields.title['en-US']);
-    console.log("Chinese title:", fields.title['zh'] || fields.title['zh-CN']);
-  }
-
-  const getImageUrl = (imageField) => {
-    if (!imageField) return null;
-
-    const defaultImage = imageField['en-US'] || imageField;
-    return defaultImage?.fields?.file?.url 
-      ? `https:${defaultImage.fields.file.url}`
-      : null;
-  };
-
   // Basic product data
   const product = {
     id: sys.id,
-    slug: fields.slug || `product-${sys.id}`,
+    slug: productSlug,
     title: {
       en: fields.title?.['en-US'] || '',
       zh: fields.title?.['zh-CN'] || fields.title?.['zh'] || '',
@@ -88,7 +74,8 @@ const transformProductData = (item) => {
       en: fields.description?.['en-US'] || '',
       zh: fields.description?.['zh-CN'] || fields.description?.['zh'] || '',
     },
-    image: getImageUrl(),
+    // Use the mapping function to get the correct image path
+    image: getProductImage(productSlug),
   };
   
   // Handle Features field (as JSON object or localized)
@@ -185,21 +172,11 @@ const transformProductData = (item) => {
     }
   }
   
-  // Gallery images (if present)
-  if (fields.galleryImages && Array.isArray(fields.galleryImages)) {
-    product.gallery = fields.galleryImages.map(img => ({
-      url: `https:${img.fields.file.url}`,
-      alt: img.fields.title || product.title.en,
-    }));
-  }
+  // Use the mapping function to get gallery images if any
+  product.gallery = getProductGallery(productSlug, product.title.en);
   
   return product;
 };
-
-// export default {
-//   getContentfulProducts,
-//   getContentfulProductBySlug
-// };
 
 export const testLocalizedFields = async () => {
   try {
@@ -227,10 +204,6 @@ export const testLocalizedFields = async () => {
     return null;
   }
 };
-
-testLocalizedFields().then(data => {
-  console.log('Processed image URL:', data.transformed.image);
-});
 
 // Update the default export
 export default {
