@@ -52,7 +52,7 @@ export default function Contact() {
 
   return (
     <Layout
-      title={locale === 'en' ? 'Contact Us | PJY Touchscreen' : '联系我们 | PJY触摸屏'}
+      title={locale === 'en' ? 'Contact Us' : '联系我们'}
       description={locale === 'en' 
         ? 'Get in touch with PJY Touchscreen Manufacturing for inquiries, support, or partnership opportunities.' 
         : '联系PJY触摸屏制造，了解咨询、支持或合作机会。'}

@@ -10,7 +10,7 @@ export default function Products({ products }) {
 
   return (
     <Layout
-      title={locale === 'en' ? 'Products | PJY Touchscreen' : '产品 | PJY触摸屏'}
+      title={locale === 'en' ? 'Products' : '产品'}
       description={locale === 'en' 
         ? 'Explore our range of high-quality touchscreen products for various applications.' 
         : '探索我们各种应用的高品质触摸屏产品系列。'}

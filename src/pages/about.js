@@ -8,7 +8,7 @@ export default function About() {
 
   return (
     <Layout
-      title={locale === 'en' ? 'About Us | PJY Touchscreen' : '关于我们 | PJY触摸屏'}
+      title={locale === 'en' ? 'About Us' : '关于我们'}
       description={locale === 'en' 
         ? 'Learn about PJY Touchscreen Manufacturing, our history, mission, and values.' 
         : '了解PJY触摸屏制造，我们的历史、使命和价值观。'}

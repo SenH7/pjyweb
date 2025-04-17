@@ -1,24 +1,42 @@
 {
-    "site": {
-      "title": "鹏锦源科技有限公司",
-      "description": "为各行业提供高品质触摸屏解决方案"
-    },
-    "nav": {
-      "home": "首页",
-      "about": "关于我们",
-      "products": "产品",
-      "contact": "联系我们"
-    },
-    "search": {
-      "placeholder": "搜索产品...",
-      "noResults": "未找到结果",
-      "button": "搜索"
-    },
-    "footer": {
-      "title": "鹏锦源科技有限公司",
-      "copyright": "© 2025 鹏锦源科技有限公司。保留所有权利。",
-      "address": "创新区技术园123号",
-      "phone": "+1 (555) 123-4567",
-      "email": "info@pjytouch.com"
-    }
+  "site": {
+    "title": "深圳市鹏锦源科技有限公司",
+    "description": "为各行业提供高品质触摸屏解决方案"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "products": "产品",
+    "contact": "联系我们",
+    "certificates": "认证证书"
+  },
+  "search": {
+    "placeholder": "搜索产品...",
+    "noResults": "未找到结果",
+    "button": "搜索"
+  },
+  "certificates": {
+    "title": "我们的认证",
+    "subtitle": "通过专业认证验证的质量",
+    "description": "我们对品质和卓越的承诺通过这些专业认证得到验证",
+    "qualityManagement": "质量管理",
+    "qualityDescription": "产品通过ISO9001:2015认证，确保我们的产品和服务通过有效的质量管理体系持续满足客户需求",
+    "whyMatter": "为什么我们的认证很重要",
+    "qualityAssurance": "质量保证",
+    "qualityAssuranceDesc": "我们的认证保证所有产品符合严格的国际质量标准",
+    "regulatoryCompliance": "法规合规性",
+    "regulatoryComplianceDesc": "我们确保所有产品符合国际市场所需的各项法规",
+    "customerConfidence": "客户信任",
+    "customerConfidenceDesc": "我们的认证使客户对我们产品的可靠性和质量充满信心",
+    "ctaTitle": "准备与认证制造商合作？",
+    "ctaDescription": "立即联系我们，了解我们经认证的制造流程如何为您的业务带来益处",
+    "contact": "联系我们"
+  },
+  "footer": {
+    "title": "深圳市鹏锦源科技有限公司",
+    "copyright": "© 2025 鹏锦源科技有限公司。保留所有权利。",
+    "address": "创新区技术园123号",
+    "phone": "+1 (555) 123-4567",
+    "email": "info@pjytouch.com"
   }
+}

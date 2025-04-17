@@ -1,24 +1,42 @@
 {
-    "site": {
-      "title": "Peng Jinyuan Technology Co., LTD",
-      "description": "High-quality touchscreen solutions for various industries"
-    },
-    "nav": {
-      "home": "Home",
-      "about": "About Us",
-      "products": "Products",
-      "contact": "Contact Us"
-    },
-    "search": {
-      "placeholder": "Search products...",
-      "noResults": "No results found",
-      "button": "Search"
-    },
-    "footer": {
-      "title": "Peng Jinyuan Technology Co., LTD",
-      "copyright": "© 2025 PJY Touchscreen Manufacturing. All rights reserved.",
-      "address": "123 Technology Park, Innovation District",
-      "phone": "+1 (555) 123-4567",
-      "email": "info@pjytouch.com"
-    }
+  "site": {
+    "title": "Peng Jinyuan Technology Co., LTD",
+    "description": "High-quality touchscreen solutions for various industries"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "contact": "Contact Us",
+    "certificates": "Certificates"
+  },
+  "search": {
+    "placeholder": "Search products...",
+    "noResults": "No results found",
+    "button": "Search"
+  },
+  "certificates": {
+    "title": "Our Certifications",
+    "subtitle": "Quality verified by professional certifications",
+    "description": "Our commitment to quality and excellence is verified by these professional certifications",
+    "qualityManagement": "Quality Management",
+    "qualityDescription": "PJY Touchscreen is ISO9001:2015 certified, ensuring our products and services consistently meet customer requirements through an effective quality management system",
+    "whyMatter": "Why Our Certifications Matter",
+    "qualityAssurance": "Quality Assurance",
+    "qualityAssuranceDesc": "Our certifications guarantee that all products meet strict international quality standards",
+    "regulatoryCompliance": "Regulatory Compliance",
+    "regulatoryComplianceDesc": "We ensure all our products comply with the necessary regulations for international markets",
+    "customerConfidence": "Customer Confidence",
+    "customerConfidenceDesc": "Our certifications provide customers with confidence in the reliability and quality of our products",
+    "ctaTitle": "Ready to Work with a Certified Manufacturer?",
+    "ctaDescription": "Contact us today to learn how our certified manufacturing processes can benefit your business",
+    "contact": "Contact Us"
+  },
+  "footer": {
+    "title": "Peng Jinyuan Technology Co., LTD",
+    "copyright": "© 2025 PJY Touchscreen Manufacturing. All rights reserved.",
+    "address": "123 Technology Park, Innovation District",
+    "phone": "+1 (555) 123-4567",
+    "email": "info@pjytouch.com"
   }
+}

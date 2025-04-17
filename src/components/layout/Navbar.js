@@ -1,3 +1,4 @@
+// src/components/layout/Navbar.js
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -41,6 +42,9 @@ const Navbar = () => {
             </Link>
             <Link href="/products" className={`nav-link ${router.pathname.startsWith('/products') ? 'font-semibold' : ''}`}>
               {t('nav.products')}
+            </Link>
+            <Link href="/certificates" className={`nav-link ${router.pathname === '/certificates' ? 'font-semibold' : ''}`}>
+              {t('nav.certificates') || 'Certificates'}
             </Link>
             <Link href="/contact" className={`nav-link ${router.pathname === '/contact' ? 'font-semibold' : ''}`}>
               {t('nav.contact')}
@@ -89,6 +93,9 @@ const Navbar = () => {
               </Link>
               <Link href="/products" onClick={closeMenu} className={`nav-link ${router.pathname.startsWith('/products') ? 'font-semibold' : ''}`}>
                 {t('nav.products')}
+              </Link>
+              <Link href="/certificates" onClick={closeMenu} className={`nav-link ${router.pathname === '/certificates' ? 'font-semibold' : ''}`}>
+                {t('nav.certificates') || 'Certificates'}
               </Link>
               <Link href="/contact" onClick={closeMenu} className={`nav-link ${router.pathname === '/contact' ? 'font-semibold' : ''}`}>
                 {t('nav.contact')}
