@@ -23,7 +23,7 @@ export default function ProductDetail({ product, relatedProducts }) {
       dimensions: { en: 'Dimensions', zh: '尺寸规格' },
       weight: { en: 'Weight', zh: '重量' },
       resolution: { en: 'Resolution', zh: '分辨率' },
-      color: { en: 'Color', zh: '色彩' },
+      color: { en: 'Color', zh: '颜色' },
       
       // Touch screen specifications
       size: { en: 'Size', zh: '尺寸' },
