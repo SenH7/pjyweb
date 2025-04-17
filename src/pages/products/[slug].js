@@ -1,4 +1,4 @@
-// src/pages/products/[slug].js
+// src/pages/products/[slug].js - Update for categories display
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../../components/layout/Layout';
@@ -11,6 +11,38 @@ export default function ProductDetail({ product, relatedProducts }) {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language;
 
+  // Helper to translate categories
+  const getCategoryLabel = (category) => {
+    // Define category translations
+    const categoryTranslations = {
+      // English to Chinese
+      "Embedded touch display": "嵌入式触摸屏",
+      "Industry / Commerce": "工业/商业",
+      "Advertising machine": "广告机",
+      "Conference educational equipment": "会议教育设备",
+      "Terminal communication equipment": "终端通讯设备",
+      "Security surveillance camera": "安防摄像机",
+      "Television": "电视",
+      
+      // Chinese to English
+      "嵌入式触摸屏": "Embedded touch display",
+      "工业/商业": "Industry / Commerce",
+      "广告机": "Advertising machine",
+      "会议教育设备": "Conference educational equipment",
+      "终端通讯设备": "Terminal communication equipment",
+      "安防摄像机": "Security surveillance camera",
+      "电视": "Television"
+    };
+    
+    // For Chinese locale, try to get the Chinese translation
+    if (locale === 'zh' && categoryTranslations[category]) {
+      return categoryTranslations[category];
+    }
+    
+    // For English locale or if translation not found
+    return category;
+  };
+
   const ProductSpecifications = ({ product, locale }) => {
     // Skip rendering if no specifications
     if (!product.specifications || Object.keys(product.specifications).length === 0) {
@@ -20,15 +52,15 @@ export default function ProductDetail({ product, relatedProducts }) {
     // Map of specification keys to their translations
     const translations = {
       // Common specifications
-      dimensions: { en: 'Dimensions', zh: '尺寸规格' },
+      size: { en: 'Size', zh: '尺寸' },
       weight: { en: 'Weight', zh: '重量' },
+      brightness: { en: 'Brightness', zh: '亮度' },
+      dimensions: { en: 'Dimensions', zh: '机身尺寸' },
       resolution: { en: 'Resolution', zh: '分辨率' },
       color: { en: 'Color', zh: '颜色' },
       
       // Touch screen specifications
-      size: { en: 'Size', zh: '尺寸' },
       backlight: { en: 'Backlight', zh: '背光' },
-      brightness: { en: 'Brightness', zh: '亮度' },
       technology: { en: 'Technology', zh: '技术' },
       aspectRatio: { en: 'Aspect Ratio', zh: '宽高比' },
       contrastRatio: { en: 'Contrast Ratio', zh: '对比度' },
@@ -37,9 +69,6 @@ export default function ProductDetail({ product, relatedProducts }) {
       otherInterfaces: { en: 'Other Interfaces', zh: '其他接口' },
       
       // All-in-one specifications
-      maximumViewingAngle: { en: 'Maximum Viewing Angle', zh: '最大视角' },
-      effectiveDisplayArea: { en: 'Effective Display Area', zh: '有效显示区域' },
-      wallMountBracketSize: { en: 'Wall Mount Bracket Size', zh: '壁挂支架尺寸' },
       
       // Camera specifications
       audio: { en: 'Audio', zh: '音频' },
@@ -175,6 +204,26 @@ export default function ProductDetail({ product, relatedProducts }) {
             {/* Product Info */}
             <div className="lg:w-1/2">
               <h1 className="text-3xl font-bold mb-4">{product.title[locale] || product.title.en}</h1>
+              
+              {/* Display product categories */}
+              {product.categories && product.categories.length > 0 && (
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold mb-2">
+                    {locale === 'en' ? 'Categories' : '类别'}:
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {product.categories.map((category, index) => (
+                      <Link 
+                        key={index}
+                        href={`/products?category=${encodeURIComponent(category)}`}
+                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors"
+                      >
+                        {getCategoryLabel(category)}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* specifications section  */}
               {product.specifications && <ProductSpecifications product={product} locale={locale} />}
@@ -241,10 +290,29 @@ export async function getStaticProps({ params, locale }) {
   }
 
   // Fetch all products to get related products
+  // Try to find related products in the same category first
   const allProducts = await getAllProducts();
-  const relatedProducts = allProducts
-    .filter(p => p.id !== product.id)
-    .slice(0, 3);
+  let relatedProducts = [];
+
+  // If the product has categories, try to find products in the same category
+  if (product.categories && product.categories.length > 0) {
+    const mainCategory = product.categories[0];
+    // Filter products with the same category, excluding the current product
+    relatedProducts = allProducts.filter(p => 
+      p.id !== product.id && 
+      p.categories && 
+      p.categories.includes(mainCategory)
+    ).slice(0, 3);  // Get up to 3 related products
+  }
+
+  // If no related products found by category or not enough, add some random products
+  if (relatedProducts.length < 3) {
+    const randomProducts = allProducts
+      .filter(p => p.id !== product.id && !relatedProducts.some(rp => rp.id === p.id))
+      .slice(0, 3 - relatedProducts.length);
+    
+    relatedProducts = [...relatedProducts, ...randomProducts];
+  }
 
   return {
     props: {
@@ -263,11 +331,6 @@ export async function getStaticPaths() {
 
     // Create paths for all products in all locales
     const paths = [];
-
-    // Debug
-    console.log('Products for static paths:',
-      products.map(p => ({ id: p.id, slug: p.slug, type: typeof p.slug }))
-    );
 
     ['en', 'zh'].forEach(locale => {
       products.forEach(product => {
@@ -288,8 +351,6 @@ export async function getStaticPaths() {
 
         // Convert to string and ensure it's URL-safe
         slug = String(slug).trim();
-
-        console.log(`Adding path for product ${product.id} with slug "${slug}" for locale ${locale}`);
 
         paths.push({
           params: { slug },

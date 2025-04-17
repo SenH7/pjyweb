@@ -8,10 +8,20 @@ const productImageMap = {
     // Example mappings based on your current images
     '10-1-inch-embedded-capacitive-touch-display-screen': '/images/products/10.1ecapacity.jpg',
     '3-5-inch-sound-and-light-warning-spherical-camera': '/images/products/3.5camera.jpg',
-    'all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
+    
+    //advertising machine
+    '32-inch-all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
+    '43-inch-all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
+    '49-inch-all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
+    '55-inch-all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
+    '65-inch-all-in-one-touch-screen-machine': '/images/products/all-in-one.jpg',
 
-    // Add more mappings as needed
-    // 'product-slug-from-contentful': '/images/products/your-image-filename.jpg',
+    //non touch advertising machine
+    '32-inch-advertising-all-in-one-machine': '/images/products/all-in-one.jpg',
+    '43-inch-advertising-all-in-one-machine': '/images/products/all-in-one.jpg',
+    '49-inch-advertising-all-in-one-machine': '/images/products/all-in-one.jpg',
+    '55-inch-advertising-all-in-one-machine': '/images/products/all-in-one.jpg',
+    '65-inch-advertising-all-in-one-machine': '/images/products/all-in-one.jpg',
 };
 
 // Map for gallery images (you can customize this if needed)

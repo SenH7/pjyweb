@@ -62,6 +62,23 @@ const transformProductData = (item) => {
   // Extract product slug
   const productSlug = fields.slug?.['en-US'] || `product-${sys.id}`;
   
+  // Extract categories (could be in different languages or formats)
+  let categories = [];
+  
+  // Try to get categories from the category field
+  if (fields.category) {
+    // Check if it's a localized field
+    if (fields.category['en-US']) {
+      categories = Array.isArray(fields.category['en-US']) 
+        ? fields.category['en-US'] 
+        : [fields.category['en-US']];
+    } else if (Array.isArray(fields.category)) {
+      categories = fields.category;
+    } else if (typeof fields.category === 'string') {
+      categories = [fields.category];
+    }
+  }
+  
   // Basic product data
   const product = {
     id: sys.id,
@@ -71,21 +88,21 @@ const transformProductData = (item) => {
       zh: fields.titleChinese?.['en-US'] || fields.title?.['zh-CN'] || fields.title?.['zh'] || '',
     },
     // Use the mapping function to get the correct image path
-    // This function is defined in utils/imageMapping.js
     image: getProductImage(productSlug),
+    categories: categories
   };
   
   // Handle Specifications field (JSON object)
   product.specifications = {
     // Default values for common specifications
+    size: '',
     weight: '',
-    resolution: '',
     dimensions: '',
+    resolution: '',
     brightness: '',
     contrastRatio: '',
     aspectRatio: '',
     // Default values for touch specifications
-    size: '',
     backlight: '',
     technology: '',
     videoInputs: '',
@@ -107,10 +124,6 @@ const transformProductData = (item) => {
     operatingTemperature: '',
     // Default values for all in one machine specifications
 
-    maximumViewingAngle: '',
-    effectiveDisplayArea: '',
-    wallMountBracketSize: '',
-    resolution: '',
     // other specification fields...
   };
   
@@ -138,6 +151,56 @@ const transformProductData = (item) => {
   product.gallery = getProductGallery(productSlug, product.title.en);
   
   return product;
+};
+
+/**
+ * Get all unique product categories
+ * @returns {Promise<Object>} Object with categories in both languages
+ */
+export const getAllProductCategories = async () => {
+  try {
+    const products = await getContentfulProducts();
+    
+    // Collect all categories
+    const allCategories = {
+      en: new Set(),
+      zh: new Set()
+    };
+    
+    // Define common category translations
+    const categoryTranslations = {
+      "Embedded touch display": "嵌入式触摸屏",
+      "Industry / Commerce": "工业/商业",
+      "Advertising machine": "广告机",
+      "Conference educational equipment": "会议教育设备",
+      "Terminal communication equipment": "终端通讯设备",
+      "Security surveillance camera": "安防摄像机",
+      "Television": "电视"
+    };
+    
+    // Loop through all products
+    products.forEach(product => {
+      if (product.categories && product.categories.length > 0) {
+        product.categories.forEach(category => {
+          // Add English category
+          allCategories.en.add(category);
+          
+          // Add corresponding Chinese category
+          if (categoryTranslations[category]) {
+            allCategories.zh.add(categoryTranslations[category]);
+          }
+        });
+      }
+    });
+    
+    return {
+      en: Array.from(allCategories.en),
+      zh: Array.from(allCategories.zh)
+    };
+  } catch (error) {
+    console.error('Error getting product categories:', error);
+    return { en: [], zh: [] };
+  }
 };
 
 export const testLocalizedFields = async () => {
@@ -171,5 +234,6 @@ export const testLocalizedFields = async () => {
 export default {
   getContentfulProducts,
   getContentfulProductBySlug,
+  getAllProductCategories,
   testLocalizedFields
 };
