@@ -117,6 +117,61 @@ export const filterProductsByCategory = (products, category, locale = 'en') => {
 };
 
 /**
+ * Filter products by multiple categories
+ * @param {Array} products - Array of products
+ * @param {Array} categories - Categories to filter by
+ * @param {string} locale - Current locale (en or zh)
+ * @returns {Array} Filtered products
+ */
+export const filterProductsByCategories = (products, categories, locale = 'en') => {
+  if (!categories || categories.length === 0) {
+    return products;
+  }
+  
+  return products.filter(product => {
+    if (!product.categories) return false;
+    
+    return categories.some(category => 
+      filterProductsByCategory([product], category, locale).length > 0
+    );
+  });
+};
+
+/**
+ * Get a paginated subset of products
+ * @param {Array} products - Array of products
+ * @param {number} page - Current page number (starting from 1)
+ * @param {number} itemsPerPage - Number of items per page
+ * @returns {Object} - Object with paginated products, total pages, etc.
+ */
+export const getPaginatedProducts = (products, page = 1, itemsPerPage = 6) => {
+  const totalItems = products.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  // Ensure page is within valid range
+  const currentPage = Math.max(1, Math.min(page, totalPages));
+  
+  // Calculate indices
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  
+  // Get paginated items
+  const paginatedItems = products.slice(startIndex, endIndex);
+  
+  return {
+    items: paginatedItems,
+    currentPage,
+    totalPages,
+    totalItems,
+    itemsPerPage,
+    startIndex,
+    endIndex,
+    hasNextPage: currentPage < totalPages,
+    hasPrevPage: currentPage > 1
+  };
+};
+
+/**
  * Get all available categories
  * @returns {Promise<Object>} Object with categories in both languages
  */
@@ -129,5 +184,7 @@ export default {
   searchProducts,
   getProductBySlug,
   filterProductsByCategory,
+  filterProductsByCategories,
+  getPaginatedProducts,
   getProductCategories
 };

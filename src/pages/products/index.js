@@ -1,29 +1,104 @@
+// src/pages/products/index-optimized.js
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../../components/layout/Layout';
 import ProductCard from '../../components/products/ProductCard';
-import { getAllProducts, filterProductsByCategory, getProductCategories } from '../../utils/search';
+import Pagination from '../../components/ui/Pagination';
+import SimpleCategoryFilter from '../../components/ui/SimpleCategoryFilter';
+import { getProductCategories } from '../../utils/search';
 
-export default function Products({ products, categories }) {
+export default function OptimizedProducts({ categories }) {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language;
+  const router = useRouter();
   
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  // State for products and pagination
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   
-  // Update filtered products when category changes
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredProducts(products);
-    } else {
-      const filtered = filterProductsByCategory(products, selectedCategory, locale);
-      setFilteredProducts(filtered);
-    }
-  }, [selectedCategory, products, locale]);
-
+  // Get query parameters with defaults
+  const page = parseInt(router.query.page) || 1;
+  const selectedCategory = router.query.category || 'all';
+  const limit = 6; // Products per page
+  
   // Get the appropriate category list based on locale
   const categoryList = locale === 'en' ? categories.en : categories.zh;
+  
+  // Fetch products from API
+  const fetchProducts = async () => {
+    setLoading(true);
+    
+    try {
+      // Build API URL
+      const apiUrl = `/api/simple-products?page=${page}&limit=${limit}&locale=${locale}`;
+      
+      // Add category if specified
+      const categoryParam = selectedCategory !== 'all'
+        ? `&category=${encodeURIComponent(selectedCategory)}`
+        : '';
+      
+      // Fetch data
+      const response = await fetch(`${apiUrl}${categoryParam}`);
+      const { success, data } = await response.json();
+      
+      if (success) {
+        setProducts(data.items);
+        setTotalItems(data.totalItems);
+        setTotalPages(data.totalPages);
+      } else {
+        console.error('Failed to fetch products');
+        setProducts([]);
+        setTotalItems(0);
+        setTotalPages(1);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setProducts([]);
+      setTotalItems(0);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Fetch products when page, locale, or selectedCategory change
+  useEffect(() => {
+    // Fetch products when page, locale, or selectedCategory change
+    fetchProducts();
+  
+    // Preserve scroll position after router change
+    if (router.isReady) {
+      const scrollY = window.scrollY;
+      
+      // Small timeout to ensure the component has fully rendered
+      setTimeout(() => {
+        window.scrollTo(0, scrollY);
+      }, 0);
+    }
+  }, [page, locale, selectedCategory, router.query.page, router.isReady]);
+  
+  // Handle category selection
+  const handleCategoryChange = (category) => {
+    // Update URL with selected category and reset to page 1
+    const query = { ...router.query };
+    
+    if (category === 'all') {
+      delete query.category;
+    } else {
+      query.category = category;
+    }
+    
+    query.page = 1; // Reset to first page
+    
+    router.push({
+      pathname: router.pathname,
+      query
+    }, undefined, { shallow: true, scroll: false }); // Prevent scrolling
+  };
 
   return (
     <Layout
@@ -54,39 +129,38 @@ export default function Products({ products, categories }) {
             <h2 className="text-2xl font-bold mb-6">
               {locale === 'en' ? 'All Products' : '所有产品'}
             </h2>
-            <div className="flex flex-wrap gap-4">
-              <button 
-                onClick={() => setSelectedCategory('all')}
-                className={`px-4 py-2 rounded-md transition-colors ${
-                  selectedCategory === 'all' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                }`}
-              >
-                {locale === 'en' ? 'All' : '全部'}
-              </button>
-              
-              {/* Dynamic category buttons based on available categories */}
-              {categoryList.map((category) => (
-                <button 
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    selectedCategory === category 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+            
+            {/* Simple Category Filter component */}
+            <SimpleCategoryFilter
+              categories={categoryList}
+              selectedCategory={selectedCategory}
+              onChange={handleCategoryChange}
+            />
           </div>
           
-          {/* Products */}
-          {filteredProducts.length > 0 ? (
+          {/* Product Count & Status */}
+          <div className="mb-6 text-gray-600">
+            {loading ? (
+              <div className="text-center">
+                {locale === 'en' ? 'Loading products...' : '正在加载产品...'}
+              </div>
+            ) : (
+              <>
+                {locale === 'en' 
+                  ? `Showing ${products.length} of ${totalItems} products`
+                  : `显示 ${totalItems} 个产品中的 ${products.length} 个`}
+              </>
+            )}
+          </div>
+          
+          {/* Products Grid */}
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : products.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProducts.map(product => (
+              {products.map(product => (
                 <ProductCard key={product.id} product={product} locale={locale} />
               ))}
             </div>
@@ -96,6 +170,15 @@ export default function Products({ products, categories }) {
                 ? 'No products found in this category.' 
                 : '在此类别中找不到产品。'}
             </div>
+          )}
+          
+          {/* Pagination */}
+          {!loading && totalPages > 1 && (
+            <Pagination 
+              totalItems={totalItems} 
+              itemsPerPage={limit} 
+              currentPage={page} 
+            />
           )}
         </div>
       </section>
@@ -125,32 +208,24 @@ export default function Products({ products, categories }) {
   );
 }
 
-export async function getStaticProps({ locale }) {
+export async function getServerSideProps({ locale }) {
   try {
-    // Fetch products from Contentful
-    const products = await getAllProducts();
-    
     // Fetch product categories
     const categories = await getProductCategories();
     
     return {
       props: {
         ...(await serverSideTranslations(locale, ['common'])),
-        products,
         categories,
       },
-      // Revalidate every hour (3600 seconds)
-      revalidate: 3600,
     };
   } catch (error) {
-    console.error('Error in getStaticProps:', error);
+    console.error('Error in getServerSideProps:', error);
     return {
       props: {
         ...(await serverSideTranslations(locale, ['common'])),
-        products: [],
         categories: { en: [], zh: [] },
       },
-      revalidate: 3600,
     };
   }
 }
