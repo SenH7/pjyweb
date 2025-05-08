@@ -1,13 +1,15 @@
 // src/pages/contact.js
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/layout/Layout';
 import GoogleMap from '../components/ui/GoogleMap';
+import emailjs from '@emailjs/browser';
 
 export default function Contact() {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language;
+  const formRef = useRef();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -32,24 +34,51 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormStatus({ submitted: true, success: false, message: locale === 'en' ? 'Sending...' : '发送中...' });
 
-    // In a real implementation, this would send data to a server
-    // For this static example, we'll simulate a successful submission
-    setFormStatus({
-      submitted: true,
-      success: true,
-      message: locale === 'en'
-        ? 'Thank you for your message. We will contact you soon!'
-        : '感谢您的留言。我们将尽快与您联系！'
-    });
+    // EmailJS service, template, and public key values
+    // Replace these with your actual EmailJS values
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
-    // Reset form after submission
-    setFormData({
-      name: '',
-      email: '',
-      company: '',
-      message: ''
-    });
+    // Prepare template parameters
+    const templateParams = {
+      from_name: formData.name,
+      reply_to: formData.email,
+      company: formData.company || 'Not specified',
+      message: formData.message
+    };
+
+    // Send email using EmailJS
+    emailjs.send(serviceId, templateId, templateParams, publicKey)
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        setFormStatus({
+          submitted: true,
+          success: true,
+          message: locale === 'en'
+            ? 'Thank you for your message. We will contact you soon!'
+            : '感谢您的留言。我们将尽快与您联系！'
+        });
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          message: ''
+        });
+      })
+      .catch((err) => {
+        console.error('FAILED...', err);
+        setFormStatus({
+          submitted: true,
+          success: false,
+          message: locale === 'en'
+            ? 'Sorry, there was an error sending your message. Please try again later.'
+            : '抱歉，发送您的消息时出错。请稍后再试。'
+        });
+      });
   };
 
   // Company address for the map
@@ -159,7 +188,7 @@ export default function Contact() {
                 </div>
               ) : null}
 
-              <form onSubmit={handleSubmit}>
+              <form ref={formRef} onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
                     <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
@@ -239,7 +268,7 @@ export default function Contact() {
           <h2 className="text-2xl font-bold mb-8 text-center">
             {locale === 'en' ? 'Find Us' : '查找我们'}
           </h2>
-          
+
           {/* Google Map Component */}
           <div className="rounded-lg overflow-hidden shadow-lg h-96">
             {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
@@ -261,7 +290,7 @@ export default function Contact() {
               </div>
             )}
           </div>
-          
+
           {/* Additional location info */}
           <div className="mt-8 text-center">
             <h3 className="text-xl font-semibold mb-2">
