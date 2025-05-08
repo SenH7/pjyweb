@@ -1,7 +1,9 @@
+// src/pages/contact.js
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Layout from '../components/layout/Layout';
+import GoogleMap from '../components/ui/GoogleMap';
 
 export default function Contact() {
   const { t, i18n } = useTranslation('common');
@@ -49,6 +51,11 @@ export default function Contact() {
       message: ''
     });
   };
+
+  // Company address for the map
+  const companyAddress = locale === 'en'
+    ? 'Tianliao community, Yutang Street, Guangming District, Shenzhen, China'
+    : '中国深圳市光明区玉塘街道田寮社区';
 
   return (
     <Layout
@@ -232,12 +239,38 @@ export default function Contact() {
           <h2 className="text-2xl font-bold mb-8 text-center">
             {locale === 'en' ? 'Find Us' : '查找我们'}
           </h2>
-          {/* In a real implementation, this would be a Google Map or other map service */}
-          <div className="bg-gray-300 rounded-lg h-96 flex items-center justify-center">
-            <p className="text-gray-600">
+          
+          {/* Google Map Component */}
+          <div className="rounded-lg overflow-hidden shadow-lg h-96">
+            {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+              <GoogleMap address={companyAddress} zoom={16} />
+            ) : (
+              <div className="bg-gray-300 h-full flex items-center justify-center">
+                <div className="text-center p-6">
+                  <p className="text-gray-600 mb-4">
+                    {locale === 'en'
+                      ? 'Google Maps API key is required to display the map.'
+                      : '需要Google地图API密钥来显示地图。'}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {locale === 'en'
+                      ? 'Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables.'
+                      : '请在环境变量中设置NEXT_PUBLIC_GOOGLE_MAPS_API_KEY。'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Additional location info */}
+          <div className="mt-8 text-center">
+            <h3 className="text-xl font-semibold mb-2">
+              {locale === 'en' ? 'How to Reach Us' : '如何到达'}
+            </h3>
+            <p className="text-gray-700 max-w-2xl mx-auto">
               {locale === 'en'
-                ? 'Map would be displayed here in a real implementation'
-                : '在实际实现中，地图将显示在此处'}
+                ? 'We are conveniently located in the Guangming District of Shenzhen, easily accessible by public transportation. If you need detailed directions, please contact us directly.'
+                : '我们位于深圳市光明区，交通便利。如果您需要详细的路线指引，请直接联系我们。'}
             </p>
           </div>
         </div>
