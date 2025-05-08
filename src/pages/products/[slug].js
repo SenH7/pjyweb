@@ -17,6 +17,7 @@ export default function ProductDetail({ product, relatedProducts }) {
     const categoryTranslations = {
       // English to Chinese
       "Embedded touch display": "嵌入式触摸屏",
+      "Open-frame touch display": "开放式触摸屏",
       "Industry / Commerce": "工业/商业",
       "Advertising machine": "广告机",
       "Conference educational equipment": "会议教育设备",
@@ -26,6 +27,7 @@ export default function ProductDetail({ product, relatedProducts }) {
       
       // Chinese to English
       "嵌入式触摸屏": "Embedded touch display",
+      "开放式触摸屏": "Open-frame touch display",
       "工业/商业": "Industry / Commerce",
       "广告机": "Advertising machine",
       "会议教育设备": "Conference educational equipment",
@@ -62,27 +64,20 @@ export default function ProductDetail({ product, relatedProducts }) {
       // Touch screen specifications
       backlight: { en: 'Backlight', zh: '背光' },
       technology: { en: 'Technology', zh: '技术' },
-      aspectRatio: { en: 'Aspect Ratio', zh: '宽高比' },
+      displayRatio: { en: 'Display Ratio', zh: '显示比例' },
       contrastRatio: { en: 'Contrast Ratio', zh: '对比度' },
-      videoInputs: { en: 'Video Inputs', zh: '视频输入' },
       compatibleOS: { en: 'Compatible OS', zh: '兼容操作系统' },
-      otherInterfaces: { en: 'Other Interfaces', zh: '其他接口' },
+      inputInterfaces: { en: 'Input Interfaces', zh: '接口' },
       
       // All-in-one specifications
       
       // Camera specifications
+      model: { en: 'Model', zh: '型号' },
+      lens: { en: 'Lens', zh: '镜头' },
       audio: { en: 'Audio', zh: '音频' },
-      lenses: { en: 'Lenses', zh: '镜头' },
-      chipset: { en: 'Chipset', zh: '芯片组' },
       storage: { en: 'Storage', zh: '存储' },
-      wifiRange: { en: 'WiFi Range', zh: 'WiFi范围' },
-      compression: { en: 'Compression', zh: '压缩' },
-      nightVision: { en: 'Night Vision', zh: '夜视' },
       powerSupply: { en: 'Power Supply', zh: '电源' },
-      wifiStandard: { en: 'WiFi Standard', zh: 'WiFi标准' },
-      networkInterface: { en: 'Network Interface', zh: '网络接口' },
       powerConsumption: { en: 'Power Consumption', zh: '功耗' },
-      operatingTemperature: { en: 'Operating Temperature', zh: '工作温度' }
     };
   
     // Get specifications with non-empty values

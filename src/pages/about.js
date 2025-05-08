@@ -10,14 +10,14 @@ export default function About() {
     <Layout
       title={locale === 'en' ? 'About Us' : '关于我们'}
       description={locale === 'en' 
-        ? 'Learn about PJY Touchscreen Manufacturing, our history, mission, and values.' 
-        : '了解PJY触摸屏制造，我们的历史、使命和价值观。'}
+        ? 'Learn about Peng Jinyuan products Manufacturing, our history, mission, and values.' 
+        : '了解鹏锦源的产品制造，我们的历史、使命和价值观。'}
     >
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gray-100">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold mb-6 text-center">
-            {locale === 'en' ? 'About PJY Touchscreen' : '关于PJY触摸屏'}
+            {locale === 'en' ? 'About Peng Jinyuan Technology Co., LTD' : '关于深圳市鹏锦源科技有限公司'}
           </h1>
           <p className="text-xl text-center max-w-3xl mx-auto text-gray-600">
             {locale === 'en'
@@ -44,18 +44,18 @@ export default function About() {
               </h2>
               <p className="mb-4 text-gray-700">
                 {locale === 'en'
-                  ? 'Founded in 2005, PJY Touchscreen Manufacturing began with a vision to transform how people interact with technology. What started as a small team of engineers with a passion for innovation has grown into a global leader in touchscreen technology.'
-                  : '成立于2005年，PJY触摸屏制造始于一个改变人们与技术互动方式的愿景。从一个对创新充满热情的小型工程师团队开始，已发展成为触摸屏技术的全球领导者。'}
+                  ? 'Shenzhen Pengjinyuan Technology Co., Ltd. was founded in 2011. We are located in Shenzhen. We are a high-tech enterprise specializing in the production, sales, technical consultation, service and training of display devices, high-definition network cameras, and communication terminal equipment. The company mainly operates internal and external touch display screens, embedded and external embedded touch display screens, and our supporting products for communication equipment. The products are widely used in industries such as banking, transportation, new retail, new energy charging and swapping cabinets, new energy charging and swapping piles, electronics, and communications.'
+                  : '深圳市鹏锦源科技有限公司,创立于2011年,公司总部位于深圳市,是一家生产、销售、技术咨询、服务与培训为一体的专业生产显示器,高清网络摄像头，通讯终端设备的高新技术企业。公司主要经营内、外置式触膜显示器，嵌入式、外嵌式触摸显示器及通讯设备其配套产品，产品广泛应用于银行、交通、新零售业、新能源充/换电柜，新能源充/换电桩，电子、通讯等行业。'}
               </p>
               <p className="mb-4 text-gray-700">
                 {locale === 'en'
-                  ? 'Over the years, we have continuously invested in research and development to stay at the forefront of touchscreen technology. Our commitment to quality and innovation has earned us the trust of clients across various industries, from consumer electronics to industrial automation.'
-                  : '多年来，我们不断投资研发，保持在触摸屏技术的前沿。我们对质量和创新的承诺赢得了各行业客户的信任，从消费电子到工业自动化。'}
+                  ? 'The company adheres to the core values of "achieving customer success, achieving win-win development and continuous progress", and follows the business policy of "customer-oriented, quality first, service-oriented, and achieving excellence". It advocates the corporate spirit of "seeking practicality and innovation, respecting value, and fulfilling responsibility". The company is committed to pursuing professionalism and concentration, actively and effectively seeking people-oriented cooperation and development, and establishing a service system and competitive advantage for the future. Since our establishment, the company has been guided by customer service, constantly seeking practicality and innovation, and developed multiple products with independent intellectual property rights to meet the constantly changing market demands. The company strictly implements relevant national laws and standards, and firmly implements the requirements of the 3C quality management system and product safety production. The company has two assembly production lines. The factory production strictly follows the quality management system for production, has a complete production process flow and QC process, and ensures stable and reliable product quality. The company has a quality assurance laboratory, strictly controls raw materials and product quality, and provides reliable test data. Our products are highly trusted by users for their high reliability, high stability and high safety. We have been widely applied in multiple provinces and regions across the country.'
+                  : '公司秉着以“成就客户、共赢发展、不断进取”的核心价值观，以“客产为先、品质为本、服务为怀、成就卓越”的经营方针，倡导“求实创新，尊重价值，诺践责任”的企业精神，致力于追求专业与专注，积极而有效地谋求以人为本的合作与发展，建立起面向未来的服务体系与竞争优势。公司成立以来，坚持以客户服务为导向，不断求实创新，研制出多个具有自主知识产权的产品，以满足不断变化的市场需求。公司严格执行国家的相关法律和标准，坚定贯彻实施 3C质量管理体系和产品安全生产的要求。公司拥有两条装置装配生产线.工厂生产严格按照质量管理体系进行生产，具有完善的生产工艺流程及QC流程，确保产品质量稳定、可靠。公司设有品质保证实验室，严格控制原材料和产品品质，提供可靠的测试数据。公司的产品以其高可靠性、高稳定性和高安全性而备受广大用户信赖，现已在国内多个省区得到广泛的应用。'}
               </p>
               <p className="text-gray-700">
                 {locale === 'en'
-                  ? 'Today, PJY is recognized for delivering touchscreen solutions that combine reliability, performance, and innovation. We continue to push the boundaries of what\'s possible, always with the goal of creating intuitive and seamless interactions between humans and technology.'
-                  : '如今，PJY因提供兼具可靠性、性能和创新的触摸屏解决方案而受到认可。我们继续推动可能性的边界，始终以创造人与技术之间直观无缝的互动为目标。'}
+                  ? 'The company has a group of highly qualified engineering and technical personnel. 70% of them have over five years of experience in the technical development and project management of communication systems. We can provide customers with production, application, analysis, training and after-sales services, as well as research and development of new products, and constantly meet customer demands in a prompt and effective manner.'
+                  : '公司拥有一批高素质的工程技术人员，70%具有5年以上通讯系统技术开发及项目管理经验，能快捷而有效地为客户提供生产、应用、分析和培训及售后服务，以及研究、开发新产品，不断满足客户需求。'}
               </p>
             </div>
           </div>

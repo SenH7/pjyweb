@@ -215,22 +215,3 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
-
-// export async function getStaticProps({ locale }) {
-//   // Fetch products from Contentful
-//   let featuredProducts = [];
-//   try {
-//     const products = await getAllProducts();
-//     featuredProducts = products.slice(0, 3);
-//   } catch (error) {
-//     console.error('Error fetching products:', error);
-//   }
-
-//   return {
-//     props: {
-//       ...(await serverSideTranslations(locale, ['common'])),
-//       featuredProducts,
-//     },
-//     revalidate: 3600, // Revalidate every hour
-//   };
-// }

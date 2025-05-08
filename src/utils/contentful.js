@@ -101,27 +101,20 @@ const transformProductData = (item) => {
     resolution: '',
     brightness: '',
     contrastRatio: '',
-    aspectRatio: '',
+    displayRatio: '',
     // Default values for touch specifications
     backlight: '',
     technology: '',
-    videoInputs: '',
     compatibleOS: '',
-    otherInterfaces: '',
+    inputInterfaces: '',
     
     // Default values for camera specifications
+    model: '',
+    lens: '',
     audio: '',
-    lenses: '',
-    chipset: '',
     storage: '',
-    wifiRange: '',
-    compression: '',
-    nightVision: '',
     powerSupply: '',
-    wifiStandard: '',
-    networkInterface: '',
     powerConsumption: '',
-    operatingTemperature: '',
     // Default values for all in one machine specifications
 
     // other specification fields...
@@ -170,6 +163,7 @@ export const getAllProductCategories = async () => {
     // Define common category translations
     const categoryTranslations = {
       "Embedded touch display": "嵌入式触摸屏",
+      "Open-frame touch display": "开放式触摸屏",
       "Industry / Commerce": "工业/商业",
       "Advertising machine": "广告机",
       "Conference educational equipment": "会议教育设备",

@@ -75,6 +75,7 @@ export const filterProductsByCategory = (products, category, locale = 'en') => {
   const categoryTranslations = {
     // English to Chinese
     "Embedded touch display": "嵌入式触摸屏",
+    "Open-frame touch display": "开放式触摸屏",
     "Industry / Commerce": "工业/商业",
     "Advertising machine": "广告机",
     "Conference educational equipment": "会议教育设备",
@@ -84,6 +85,7 @@ export const filterProductsByCategory = (products, category, locale = 'en') => {
     
     // Chinese to English
     "嵌入式触摸屏": "Embedded touch display",
+    "开放式触摸屏": "Open-frame touch display",
     "工业/商业": "Industry / Commerce",
     "广告机": "Advertising machine",
     "会议教育设备": "Conference educational equipment",
