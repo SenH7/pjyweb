@@ -44,10 +44,11 @@ export default function Contact() {
 
     // Prepare template parameters
     const templateParams = {
-      from_name: formData.name,
-      reply_to: formData.email,
+      name: formData.name,
+      email: formData.email,
       company: formData.company || 'Not specified',
-      message: formData.message
+      message: formData.message,
+      reply_to: formData.email,
     };
 
     // Send email using EmailJS
