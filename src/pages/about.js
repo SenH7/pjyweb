@@ -121,13 +121,12 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16">
+      {/* <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
             {locale === 'en' ? 'Our Leadership Team' : '我们的领导团队'}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Team Member 1 */}
             <div className="text-center">
               <div className="mb-4 relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                 <img 
@@ -149,7 +148,6 @@ export default function About() {
               </p>
             </div>
             
-            {/* Team Member 2 */}
             <div className="text-center">
               <div className="mb-4 relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                 <img 
@@ -171,7 +169,6 @@ export default function About() {
               </p>
             </div>
             
-            {/* Team Member 3 */}
             <div className="text-center">
               <div className="mb-4 relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                 <img 
@@ -194,7 +191,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </Layout>
   );
 }
